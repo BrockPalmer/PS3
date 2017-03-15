@@ -1,56 +1,50 @@
-package pkgMain;
+package pkgEmpty;
 
 import java.io.File;
+import java.util.Date;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import pkgLibrary.Book;
+import pkgLibrary.BookException;
 import pkgLibrary.Catalog;
 
-public class XMLReader {
+public class TestCatalog {
 
-	public static void main(String[] args) {
-
-		Catalog cat = null;
-
-		//	Read the XML catalog into 'cat'
-		cat = ReadCatalog();
-		
-		//	Increase the price of each book
-		IncreasePrice(cat,0.10);
-		for (Book b:cat.getBooks()){
-			double cost= (b.getPrice()*.8);
-			b.setCost(Math.round(cost*(100.0))/(100.0));
-		}
-		
-		//	Write the XML file from 'cat' object
-		WriteXMLFile(cat);
-		
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 	}
 
-
-	
-	
-	private static Catalog ReadCatalog() {
-		Catalog cat = ReadXMLFile();
-		
-		System.out.println("cat ID " + cat.getId());
-		System.out.println("Book count: " + cat.getBooks().size());
-
-		return cat;		
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
-	private static Catalog IncreasePrice(Catalog cat, double PriceIncrease)
-	{
-		for (Book b : cat.getBooks()) {
-			double newPrice = (b.getPrice() * PriceIncrease) + b.getPrice();			
-			b.setPrice(Math.round(newPrice * 100.0) / 100.0);
-		}
-		
-		return cat;
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+	@Test(expected=BookException.class)
+	public void TestGetBook()throws BookException{
+		Catalog cat= ReadXMLFile();
+		cat.GetBook("bk001");
+	}
+	@Test
+	public void TestGetBook2()throws BookException{
+		Catalog cat= ReadXMLFile();
+		cat.GetBook("bk101");
 	}
 	
 	private static void WriteXMLFile(Catalog cat) {
@@ -97,3 +91,6 @@ public class XMLReader {
 	}
 
 }
+
+
+

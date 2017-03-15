@@ -1,4 +1,6 @@
-package pkgMain;
+package pkgEmpty;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -7,50 +9,47 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import pkgLibrary.Book;
+import pkgLibrary.BookException;
 import pkgLibrary.Catalog;
 
-public class XMLReader {
+public class TestBook {
 
-	public static void main(String[] args) {
-
-		Catalog cat = null;
-
-		//	Read the XML catalog into 'cat'
-		cat = ReadCatalog();
-		
-		//	Increase the price of each book
-		IncreasePrice(cat,0.10);
-		for (Book b:cat.getBooks()){
-			double cost= (b.getPrice()*.8);
-			b.setCost(Math.round(cost*(100.0))/(100.0));
-		}
-		
-		//	Write the XML file from 'cat' object
-		WriteXMLFile(cat);
-		
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 	}
 
-
-	
-	
-	private static Catalog ReadCatalog() {
-		Catalog cat = ReadXMLFile();
-		
-		System.out.println("cat ID " + cat.getId());
-		System.out.println("Book count: " + cat.getBooks().size());
-
-		return cat;		
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 	}
 
-	private static Catalog IncreasePrice(Catalog cat, double PriceIncrease)
-	{
-		for (Book b : cat.getBooks()) {
-			double newPrice = (b.getPrice() * PriceIncrease) + b.getPrice();			
-			b.setPrice(Math.round(newPrice * 100.0) / 100.0);
+	@Before
+	public void setUp() throws Exception {
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+	
+	@Test(expected=BookException.class)
+	public void TestAddBook() throws Exception {
+		Catalog cat= ReadXMLFile();
+				
+		cat.AddBook("bk101", null);
 		}
-		
-		return cat;
+	@Test
+	public void TestAddBook2() throws BookException{
+	//Adds a book same ID as the exsisting should be false
+	Catalog cat= ReadXMLFile();
+	int size= cat.getBooks().size();
+	cat.AddBook("bk150", null);
+	assertTrue(cat.getBooks().size()==size+1);
 	}
 	
 	private static void WriteXMLFile(Catalog cat) {
@@ -94,6 +93,10 @@ public class XMLReader {
 
 		return cat;
 
-	}
+}
+
+
+
+
 
 }
