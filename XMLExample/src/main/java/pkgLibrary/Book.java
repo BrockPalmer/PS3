@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.math3.analysis.function.Add;
+
 public class Book {
 
 	private String id;
@@ -15,12 +17,34 @@ public class Book {
 	private double price;
 	private Date publish_date;
 	private String description;
-
-	public Book() {
-
+	private double Cost;
+public Book(){
+	
+}
+	public Book(String id, Catalog cat)throws BookException {
+		boolean value= false; 
+		for(Book b:cat.getBooks()){
+			if(b.getId()==id){
+				value= true;
+				this.id= b.getId();
+				this.author= b.getAuthor();
+				this.title= b.getTitle();
+				this.genre= b.getGenre();
+				this.price= b.getPrice();
+				this.publish_date= b.getPublish_date();
+				this.description= b.getDescription();
+				this.Cost= b.getCost();				
+		
+			}
+		}
+		if (value== false){
+			throw new BookException();
+		}
+		
 	}
+	
 
-	public Book(String id, String author, String title, String genre, double price, Date publish_date, String description)
+	public Book(String id, String author, String title, String genre, double price, Date publish_date, String description, double Cost)
 	{
 		super();
 		this.id = id;
@@ -30,9 +54,12 @@ public class Book {
 		this.price = price;
 		this.publish_date = publish_date;
 		this.description = description;
+		this.Cost= price *.8;
 	}
 	
- 
+	public Book(String id){
+	 this(id, "","","",0,new Date(),"",0);
+	}
 
 	public String getId() {
 		return id;
@@ -96,7 +123,14 @@ public class Book {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public double getCost() {
+		return Cost;
+	}
 
+	@XmlAttribute
+	public void setCost(double Cost) {
+		this.Cost = Cost;
+	}
 	
 	
 
